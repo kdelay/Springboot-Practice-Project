@@ -1,12 +1,15 @@
 package com.mysite.sbb;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +28,11 @@ public class Question {
 	private String content;
 	
 	private LocalDateTime createDate; // 데이터베이스의 테이블에서는 create_date로 설정됨
+	
+	// 답변을 참조할 때 question.getAnswerList() 호출
+	// mappedBy : 참조 엔티티의 속성명 정의
+	// 질문 -> 답변 참조 기능
+	@OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE) // -> 질문을 삭제할 경우 답변도 함께 삭제 cascade
+	private List<Answer> answerList;
+	
 }
