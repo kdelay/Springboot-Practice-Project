@@ -4,10 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mysite.sbb.answer.AnswerForm;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 // 애너테이션의 생성자 방식으로 QuestionRepository 객체 주입
@@ -29,10 +35,26 @@ public class QuestionController {
 	}
 	
 	@GetMapping(value = "/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Integer id) {
+	public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
 		Question question = this.questionService.getQuestion(id);
 		model.addAttribute("question", question);
 		return "question_detail";
 	}
-
+	
+	// 오버로딩을 이용해서 질문 등록 기능 추가하기
+    @GetMapping("/create")
+    public String questionCreate(QuestionForm questionForm) {
+        return "question_form";
+    }
+	
+    // 매개변수 subject, content -> QuestionForm 객체로 변경
+    // QuestionForm subject, content 속성이 자동으로 바인딩된다. (폼의 바인딩 기능)
+	@PostMapping("/create")
+	public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "question_form";
+		}
+		this.questionService.create(questionForm.getSubject(), questionForm.getContent());
+		return "redirect:/question/list"; // 질문 저장 후 질문 목록으로 이동
+	}
 }
