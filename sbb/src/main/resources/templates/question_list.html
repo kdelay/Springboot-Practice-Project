@@ -1,19 +1,24 @@
-<table>
-	<thead>
-		<tr>
-			<th>제목</th>
-			<th>작성일시</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr th:each="question : ${questionList}">
-            <td>
-                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
-            </td>
-			<td th:text="${question.createDate}"></td>
-		</tr>
-	</tbody>
-</table>
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div class="container my-3">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일시</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="question, loop : ${questionList}">
+                <td th:text="${loop.count}"></td>
+                <td>
+                    <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                </td>
+                <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <!-- [분기문] if문, else if문 : question객체가 null이 아닌 경우에만 이 속성을 포함한 요소가 표시된다. -->
 <!--/*--> 
