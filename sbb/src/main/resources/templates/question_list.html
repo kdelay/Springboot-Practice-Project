@@ -13,12 +13,16 @@
 	</tbody>
 </table>
 
-<!--
-[분기문] if문, else if문 : question객체가 null이 아닌 경우에만 이 속성을 포함한 요소가 표시된다. 
-	th:if="${question != null}" 
-[반복문] for each와 유사 : loop.index/count/size/first/last/odd/even/current...
+<!-- [분기문] if문, else if문 : question객체가 null이 아닌 경우에만 이 속성을 포함한 요소가 표시된다. -->
+<!--/*--> 
+	th:if="${question != null}"
+<!--*/--> 
+<!-- [반복문] for each와 유사 : loop.index/count/size/first/last/odd/even/current... -->
+<!--/*-->
 	th:each="question, loop : ${questionList}"
-[텍스트] 해당 요소의 텍스트 값을 출력한다. + th:text 대신에 대괄호를 사용하여 값을 직접 출력할 수 있다.
-	1) th:text="${question.subject}"
-	2) <td>[[${question.subject}]]</td>
- -->
+<!--*/-->
+<!-- [텍스트] 해당 요소의 텍스트 값을 출력한다. + th:text 대신에 대괄호를 사용하여 값을 직접 출력할 수 있다. -->
+<!--/*-->
+	th:text="${question.subject}"
+	<td>[[${question.subject}]]</td>
+<!--*/-->
