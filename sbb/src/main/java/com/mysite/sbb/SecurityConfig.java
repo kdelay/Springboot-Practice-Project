@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+// @PreAuthorize가 동작할 수 있도록 수정
+// prePostEnabled가 있어야 @PreAuthorize를 사용할 수 있다.
+@EnableMethodSecurity(prePostEnabled = true)
 // @Configuration : 스프링의 환경 설정 파일 의미 (스프링 시큐리티를 설정하기 위해 사용)
 // @EnableWebSecurity : 모든 요청 URL이 스프링 시큐리티의 제어를 받도록 만듬 -> 스프링 시큐리티 활성화
 @Configuration
