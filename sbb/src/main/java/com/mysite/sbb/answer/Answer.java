@@ -36,4 +36,7 @@ public class Answer {
     // 글쓴이
     @ManyToOne
     private SiteUser author;
+    
+    // 수정 일시
+ 	private LocalDateTime modifyDate;
 }
