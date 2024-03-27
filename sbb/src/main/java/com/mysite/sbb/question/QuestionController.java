@@ -34,11 +34,13 @@ public class QuestionController {
 	private final UserService userService;
 	
 	@GetMapping("/list")
-	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) { // Model 객체는 자바 클래스와 템플릿 간의 연결 고리 역할을 한다.
+	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page // Model 객체는 자바 클래스와 템플릿 간의 연결 고리 역할을 한다.
+			, @RequestParam(value = "kw", defaultValue = "") String kw) { 
 		// Model 객체에 값을 담아 두면 템플릿에서 그 값을 사용할 수 있다.
 		// 컨트롤러의 메서드에 매개변수로 지정하기만 하면 스프링 부트가 자동으로 Model 객체를 생성한다.
-		Page<Question> paging = this.questionService.getList(page);
+		Page<Question> paging = this.questionService.getList(page, kw);
 		model.addAttribute("paging", paging);
+		model.addAttribute("kw",kw);
 		return "question_list";
 	}
 	
