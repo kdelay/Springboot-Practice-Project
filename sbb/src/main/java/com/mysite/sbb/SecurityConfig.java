@@ -2,6 +2,8 @@ package com.mysite.sbb;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +39,20 @@ public class SecurityConfig {
 			.headers((headers) -> headers
 					.addHeaderWriter(new XFrameOptionsHeaderWriter(
 							XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-			;
+			// 스프링 시큐리티에 로그인을 하기 위한 URL 설정
+			// 로그인 실패 시 페이지 매개변수로 error가 함께 전달된다. 템플릿에서 ${param.error}로 error 매개변수가 전달되었는지 확인할 수 있다.
+			// 스프링 시큐리티를 통해 로그인을 수행하는 방법은 여러 가지가 있다.
+			// -> 시큐리티 설정 파일에 사용자 ID와 비밀번호를 직접 등록하여 인증을 처리하는 메모리 방식이 있음
+			// -> [사용] DB에서 회원 정보를 조회하여 로그인
+			.formLogin((formLogin) -> formLogin
+					.loginPage("/user/login") // 로그인을 담당하는 페이지
+					.defaultSuccessUrl("/")) // 성공 시 루트 URL로 이동
+			// 로그아웃 설정
+			.logout((logout) -> logout
+					.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+					.logoutSuccessUrl("/")
+					.invalidateHttpSession(true))
+			;			
 		;
 		return http.build();
 	}
@@ -48,5 +63,11 @@ public class SecurityConfig {
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	// 로그인 기능을 위한 인증 빈 생성
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 }
